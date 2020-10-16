@@ -90,12 +90,16 @@ describe('Fancy Relationships', () => {
             where: {
                 title: "Afternoon tea"
             },
-            include: [
-                {model: Item, as: 'items'}
-            ]
+            include: 
+                'items'
         })
         expect(menu.title).toBe("Afternoon tea")
         expect(menu.items).toBeTruthy
         expect(menu.items[0].name).toBe("Prêt-à-Portea")
+    });
+    test('a restaurant has many menus which has many items', async () => {
+        const restaurant = await Restaurant.findOne({where: {name: "Cafe Monico"}, include:[{all: true, nested: true}]})
+        expect(restaurant.menus.length).toBe(3)
+        expect(restaurant.menus[0].items[0].name).toBe("Chicken Liver Parfait")
     });
 });
